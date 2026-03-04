@@ -131,6 +131,13 @@ function LoginForm() {
             </Button>
           </form>
         </Form>
+
+        <div className="text-center mt-4">
+          <Link href="/forgot-password" className="text-sm text-primary hover:underline">
+            Mot de passe oublié ?
+          </Link>
+        </div>
+
         <div className="flex flex-col items-center justify-center space-y-2 border-t pt-6 mt-6">
           <div className="text-sm text-muted-foreground">
             Vous n'avez pas de compte ?
