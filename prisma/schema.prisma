@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  clothingItems ClothingItem[]
+  outfitPlans   OutfitPlan[]
+}
+
+model ClothingItem {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  imageUrl    String?
+  type        String   // e.g., "t-shirt", "pants", "shoes"
+  color       String?  // e.g., "blue", "black"
+  style       String?  // e.g., "casual", "formal"
+  brand       String?
+  barcode     String?  // Optional barcode if available
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  outfits     OutfitItem[]
+}
+
+model OutfitPlan {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      DateTime
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  items     OutfitItem[]
+}
+
+model OutfitItem {
+  id             String       @id @default(cuid())
+  outfitPlanId   String
+  outfitPlan     OutfitPlan   @relation(fields: [outfitPlanId], references: [id], onDelete: Cascade)
+  clothingItemId String
+  clothingItem   ClothingItem @relation(fields: [clothingItemId], references: [id], onDelete: Cascade)
+}
